@@ -1,8 +1,7 @@
 package router
 
 import (
-	"net/http"
-
+	"github.com/DaviidSantos/uno-api/handlers"
 	"github.com/gin-gonic/gin"
 )
 
@@ -11,22 +10,10 @@ func initializeRoutes(r *gin.Engine) {
 
 	solicitante := v1.Group("solicitante")
 	{
-		solicitante.GET("", func(ctx *gin.Context) {
-			ctx.JSON(http.StatusOK, gin.H{
-				"msg": "GET Solicitante",
-			})
-		})
+		solicitante.GET("", handlers.GetSolicitante)
 
-		solicitante.POST("", func(ctx *gin.Context) {
-			ctx.JSON(http.StatusOK, gin.H{
-				"msg": "POST Solicitante",
-			})
-		})
+		solicitante.POST("", handlers.PostSolicitante)
 
-		solicitante.PATCH("", func(ctx *gin.Context) {
-			ctx.JSON(http.StatusOK, gin.H{
-				"msg": "PATCH Solicitante",
-			})
-		})
+		solicitante.PATCH("", handlers.PatchSolicitante)
 	}
 }
