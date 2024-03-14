@@ -9,9 +9,29 @@ import (
 )
 
 func GetSolicitante(ctx *gin.Context) {
-	ctx.JSON(http.StatusOK, gin.H{
-		"msg": "GET Solicitante",
-	})
+	cnpj := ctx.Query("cnpj")
+
+	if cnpj == "" {
+		sendError(ctx, http.StatusBadRequest, errParamIsRequired("cnpj", "queryParameter").Error())
+		return
+	}
+
+	solicitante := SolicitanteResponse{}
+
+	err := db.QueryRow(context.Background(), "SELECT * FROM solicitante WHERE cnpj = $1", cnpj).Scan(&solicitante.Cnpj, &solicitante.NomeFantasia, &solicitante.Cep, &solicitante.Rua, &solicitante.Numero, &solicitante.Cidade, &solicitante.Estado)
+
+	if err != nil {
+		if err.Error() == "no rows in result set" {
+			sendError(ctx, http.StatusNotFound, "solicitante não encontrado!")
+			return
+		}
+
+		logger.Errorf("querying error: %v", err.Error())
+		sendError(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	sendSuccess(ctx, "get-solicitante", solicitante)
 }
 
 func PostSolicitante(ctx *gin.Context) {
