@@ -41,3 +41,20 @@ func (r *CreateSolicitanteRequest) Validate() error {
 
 	return nil
 }
+
+type PatchsolicitanteRequest struct {
+	NomeFantasia string `json:"nome_fantasia"`
+	Cep          string `json:"cep"`
+	Rua          string `json:"rua"`
+	Numero       string `json:"numero"`
+	Cidade       string `json:"cidade"`
+	Estado       string `json:"estado"`
+}
+
+func (r *PatchsolicitanteRequest) Validate() error {
+	if r.NomeFantasia != "" || r.Cep != "" || r.Rua != "" || r.Numero != "" || r.Cidade != "" || r.Estado != "" {
+		return nil
+	}
+
+	return fmt.Errorf("at least one field must be provided")
+}
