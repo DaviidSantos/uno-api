@@ -95,3 +95,65 @@ func PostSolicitacaoAnalise(ctx *gin.Context) {
 
 	sendSuccess(ctx, "create-solicitacao-analise", "solicitação de análise adicionada com sucesso!")
 }
+
+func PatchSolicitacaoAnalise(ctx *gin.Context) {
+	idRow := ctx.Query("id_row")
+
+	if idRow == "" {
+		sendError(ctx, http.StatusBadRequest, errParamIsRequired("id_row", "string").Error())
+		return
+	}
+
+	request := PatchSolicitacaoAnaliseRequest{}
+
+	ctx.BindJSON(&request)
+
+	if err := request.Validate(); err != nil {
+		logger.Errorf("validation error: %v", err.Error())
+		sendError(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	solicitacaoAnalise := SolicitacaoAnaliseResponse{}
+
+	err := db.QueryRow(context.Background(), "SELECT * FROM solicitacao_analise WHERE id_row = $1", idRow).Scan(&solicitacaoAnalise.IdRow, &solicitacaoAnalise.IdSa, &solicitacaoAnalise.Solicitante, &solicitacaoAnalise.NomeProjeto, &solicitacaoAnalise.TipoAnalise, &solicitacaoAnalise.PrazoAcordado, &solicitacaoAnalise.InicioProjeto, &solicitacaoAnalise.ConclusaoProjeto)
+
+	if err != nil {
+		if err.Error() == "no rows in result set" {
+			sendError(ctx, http.StatusNotFound, "solicitacao de análise não encontrada!")
+			return
+		}
+
+		logger.Errorf("querying error: %v", err.Error())
+		sendError(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	if request.InicioProjeto != "" {
+		parsedDate, _ := time.Parse("2006-01-02", request.InicioProjeto)
+		solicitacaoAnalise.InicioProjeto = &parsedDate
+	}
+
+	if request.ConclusaoProjeto != "" {
+		parsedDate, _ := time.Parse("2006-01-02", request.ConclusaoProjeto)
+		solicitacaoAnalise.ConclusaoProjeto = &parsedDate
+	}
+
+	query := `UPDATE solicitacao_analise SET inicio_projeto = @inicio_projeto, conclusao_projeto = @conclusao_projeto WHERE id_row = @id_row`
+
+	args := pgx.NamedArgs{
+		"inicio_projeto":    solicitacaoAnalise.InicioProjeto,
+		"conclusao_projeto": solicitacaoAnalise.ConclusaoProjeto,
+		"id_row":            idRow,
+	}
+
+	_, err = db.Exec(context.Background(), query, args)
+
+	if err != nil {
+		logger.Errorf("error updating data: %v", err)
+		sendError(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	sendSuccess(ctx, "update-solicitacao-analise", "solicitação de análise alterado com sucesso!")
+}

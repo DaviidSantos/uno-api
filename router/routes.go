@@ -24,5 +24,7 @@ func initializeRoutes(r *gin.Engine) {
 		solicitacao_analise.GET("", handler.GetSolicitacaoAnalise)
 
 		solicitacao_analise.POST("", handler.PostSolicitacaoAnalise)
+
+		solicitacao_analise.PATCH("", handler.PatchSolicitacaoAnalise)
 	}
 }

@@ -95,3 +95,16 @@ func (r *CreateSolicitacaoAnaliseRequest) Validate() error {
 
 	return nil
 }
+
+type PatchSolicitacaoAnaliseRequest struct {
+	InicioProjeto    string `json:"inicio_projeto"`
+	ConclusaoProjeto string `json:"conclusao_projeto"`
+}
+
+func (r *PatchSolicitacaoAnaliseRequest) Validate() error {
+	if r.InicioProjeto != "" || r.ConclusaoProjeto != "" {
+		return nil
+	}
+
+	return fmt.Errorf("at least one field must be provided")
+}
