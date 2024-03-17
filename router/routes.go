@@ -21,6 +21,8 @@ func initializeRoutes(r *gin.Engine) {
 
 	solicitacao_analise := v1.Group("solicitacao_analise")
 	{
+		solicitacao_analise.GET("", handler.GetSolicitacaoAnalise)
+
 		solicitacao_analise.POST("", handler.PostSolicitacaoAnalise)
 	}
 }

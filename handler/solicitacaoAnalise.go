@@ -10,6 +10,45 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
+func GetSolicitacaoAnalise(ctx *gin.Context) {
+	query := `SELECT 
+		sa.id_row, sa.id_sa, s.nome_fantasia,
+		sa.nome_projeto, ta.tipo_analise,
+		sa.prazo_acordado, sa.inicio_projeto, sa.conclusao_projeto
+	FROM solicitacao_analise sa
+	INNER JOIN solicitante s
+		ON s.cnpj = sa.cnpj
+	INNER JOIN tipo_analise ta
+		ON ta.id_tipo_analise = sa.id_tipo_analise
+	`
+
+	rows, err := db.Query(context.Background(), query)
+
+	if err != nil {
+		logger.Errorf("error selecting solicitacoes de analise: %v", err.Error())
+		sendError(ctx, http.StatusInternalServerError, "error selecting solicitacoes de analise")
+		return
+	}
+
+	var solicitacoesAnalise []SolicitacaoAnaliseResponse
+
+	for rows.Next() {
+		var solicitacaoAnalise SolicitacaoAnaliseResponse
+
+		err := rows.Scan(&solicitacaoAnalise.IdRow, &solicitacaoAnalise.IdSa, &solicitacaoAnalise.Solicitante, &solicitacaoAnalise.NomeProjeto, &solicitacaoAnalise.TipoAnalise, &solicitacaoAnalise.PrazoAcordado, &solicitacaoAnalise.InicioProjeto, &solicitacaoAnalise.ConclusaoProjeto)
+
+		if err != nil {
+			logger.Errorf("error looping result set: %v", err.Error())
+			sendError(ctx, http.StatusInternalServerError, "error selecting solicitacoes de analise")
+			return
+		}
+
+		solicitacoesAnalise = append(solicitacoesAnalise, solicitacaoAnalise)
+	}
+
+	sendSuccess(ctx, "get-all-solicitacoes-analise", solicitacoesAnalise)
+}
+
 func PostSolicitacaoAnalise(ctx *gin.Context) {
 	request := CreateSolicitacaoAnaliseRequest{}
 

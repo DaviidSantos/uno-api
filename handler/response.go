@@ -3,6 +3,7 @@ package handler
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -15,6 +16,17 @@ type SolicitanteResponse struct {
 	Numero       string `json:"numero"`
 	Cidade       string `json:"cidade"`
 	Estado       string `json:"estado"`
+}
+
+type SolicitacaoAnaliseResponse struct {
+	IdRow            int        `json:"id_row"`
+	IdSa             string     `json:"id_sa"`
+	Solicitante      string     `json:"solicitante"`
+	NomeProjeto      string     `json:"nome_projeto"`
+	TipoAnalise      string     `json:"tipo_analise"`
+	PrazoAcordado    *time.Time `json:"prazo_acordado"`
+	InicioProjeto    *time.Time `json:"inicio_projeto"`
+	ConclusaoProjeto *time.Time `json:"conclusao_projeto"`
 }
 
 func sendError(ctx *gin.Context, code int, msg string) {
