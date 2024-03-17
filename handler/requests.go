@@ -69,7 +69,7 @@ func (r *PatchsolicitanteRequest) Validate() error {
 type CreateSolicitacaoAnaliseRequest struct {
 	Cnpj          string `json:"cnpj"`
 	NomeProjeto   string `json:"nome_projeto"`
-	IdTipoAnalise int    `json:"id_tipo_analise"`
+	IdTipoAnalise []int  `json:"id_tipo_analise"`
 	PrazoAcordado string `json:"prazo_acordado"`
 }
 
@@ -82,7 +82,7 @@ func (r *CreateSolicitacaoAnaliseRequest) Validate() error {
 		return errParamIsRequired("nome_projeto", "string")
 	}
 
-	if r.IdTipoAnalise == 0 {
+	if len(r.IdTipoAnalise) == 0 {
 		return errParamIsRequired("id_tipo_analise", "string")
 	}
 

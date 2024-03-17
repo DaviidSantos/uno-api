@@ -24,32 +24,34 @@ func PostSolicitacaoAnalise(ctx *gin.Context) {
 	currentYear := time.Now().Year()
 	count := 0
 
-	query := fmt.Sprintf("SELECT COUNT(DISTINCT id_sa) FROM solicitacao_analise WHERE id_sa LIKE '%d'", currentYear)
+	query := fmt.Sprintf("SELECT COUNT(DISTINCT id_sa) FROM solicitacao_analise WHERE id_sa LIKE '%%%d'", currentYear)
 
-	_, err := db.Exec(context.Background(), query)
+	err := db.QueryRow(context.Background(), query).Scan(&count)
 
 	if err != nil {
 		logger.Errorf("error counting sa: %v", err)
-		sendError(ctx, http.StatusInternalServerError, "error creating sa")
+		sendError(ctx, http.StatusInternalServerError, "error counting sa")
 		return
 	}
 
-	query = `INSERT INTO solicitacao_analise(id_sa, cnpj, nome_projeto, id_tipo_analise, prazo_acordado) VALUES(@id_sa, @cnpj, @nome_projeto, @id_tipo_analise, @prazo_acordado)`
+	for _, id_tipo_analise := range request.IdTipoAnalise {
+		query = `INSERT INTO solicitacao_analise(id_sa, cnpj, nome_projeto, id_tipo_analise, prazo_acordado) VALUES(@id_sa, @cnpj, @nome_projeto, @id_tipo_analise, @prazo_acordado)`
 
-	args := pgx.NamedArgs{
-		"id_sa":           fmt.Sprintf("SA-%04d/%d", count+1, currentYear),
-		"cnpj":            request.Cnpj,
-		"nome_projeto":    request.NomeProjeto,
-		"id_tipo_analise": request.IdTipoAnalise,
-		"prazo_acordado":  request.PrazoAcordado,
-	}
+		args := pgx.NamedArgs{
+			"id_sa":           fmt.Sprintf("SA-%04d/%d", count+1, currentYear),
+			"cnpj":            request.Cnpj,
+			"nome_projeto":    request.NomeProjeto,
+			"id_tipo_analise": id_tipo_analise,
+			"prazo_acordado":  request.PrazoAcordado,
+		}
 
-	_, err = db.Exec(context.Background(), query, args)
+		_, err = db.Exec(context.Background(), query, args)
 
-	if err != nil {
-		logger.Errorf("error inserting data: %v", err)
-		sendError(ctx, http.StatusInternalServerError, err.Error())
-		return
+		if err != nil {
+			logger.Errorf("error inserting data: %v", err)
+			sendError(ctx, http.StatusInternalServerError, err.Error())
+			return
+		}
 	}
 
 	sendSuccess(ctx, "create-solicitacao-analise", "solicitação de análise adicionada com sucesso!")
