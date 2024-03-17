@@ -1,9 +1,16 @@
 package handler
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 func errParamIsRequired(name, typ string) error {
 	return fmt.Errorf("param: %s (type: %s) is required", name, typ)
+}
+
+func errParamMalformed(name, typ string) error {
+	return fmt.Errorf("param: %s (type: %s) is malformed", name, typ)
 }
 
 type CreateSolicitanteRequest struct {
@@ -57,4 +64,34 @@ func (r *PatchsolicitanteRequest) Validate() error {
 	}
 
 	return fmt.Errorf("at least one field must be provided")
+}
+
+type CreateSolicitacaoAnaliseRequest struct {
+	Cnpj          string `json:"cnpj"`
+	NomeProjeto   string `json:"nome_projeto"`
+	IdTipoAnalise int    `json:"id_tipo_analise"`
+	PrazoAcordado string `json:"prazo_acordado"`
+}
+
+func (r *CreateSolicitacaoAnaliseRequest) Validate() error {
+	if r.Cnpj == "" {
+		return errParamIsRequired("cnpj", "string")
+	}
+
+	if r.NomeProjeto == "" {
+		return errParamIsRequired("nome_projeto", "string")
+	}
+
+	if r.IdTipoAnalise == 0 {
+		return errParamIsRequired("id_tipo_analise", "string")
+	}
+
+	_, err := time.Parse("2006-01-02", r.PrazoAcordado)
+
+	if err != nil {
+		logger.Errorf("error parsing prazo_acordado: %v", err.Error())
+		return errParamMalformed("prazo_acordado", "date")
+	}
+
+	return nil
 }

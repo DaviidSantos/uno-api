@@ -18,4 +18,9 @@ func initializeRoutes(r *gin.Engine) {
 
 		solicitante.PATCH("", handler.PatchSolicitante)
 	}
+
+	solicitacao_analise := v1.Group("solicitacao_analise")
+	{
+		solicitacao_analise.POST("", handler.PostSolicitacaoAnalise)
+	}
 }
