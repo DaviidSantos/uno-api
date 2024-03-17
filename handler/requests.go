@@ -83,7 +83,7 @@ func (r *CreateSolicitacaoAnaliseRequest) Validate() error {
 	}
 
 	if len(r.IdTipoAnalise) == 0 {
-		return errParamIsRequired("id_tipo_analise", "string")
+		return errParamIsRequired("id_tipo_analise", "[]int")
 	}
 
 	_, err := time.Parse("2006-01-02", r.PrazoAcordado)
