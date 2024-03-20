@@ -108,3 +108,25 @@ func (r *PatchSolicitacaoAnaliseRequest) Validate() error {
 
 	return fmt.Errorf("at least one field must be provided")
 }
+
+type CreateLoteRequest struct {
+	IdSA       int    `json:"id_sa"`
+	Amostra    string `json:"amostra"`
+	Quantidade int    `json:"quantidade"`
+}
+
+func (r *CreateLoteRequest) Validate() error {
+	if r.IdSA == 0 {
+		return errParamIsRequired("id_sa", "int")
+	}
+
+	if r.Amostra == "" {
+		return errParamIsRequired("amostra", "string")
+	}
+
+	if r.Quantidade == 0 {
+		return errParamIsRequired("quantidade", "int")
+	}
+
+	return nil
+}
