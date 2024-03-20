@@ -29,6 +29,16 @@ type SolicitacaoAnaliseResponse struct {
 	ConclusaoProjeto *time.Time `json:"conclusao_projeto"`
 }
 
+type LoteResponse struct {
+	IdLote      int    `json:"id_lote"`
+	IdSa        string `json:"id_sa"`
+	Solicitante string `json:"solicitante"`
+	NomeProjeto string `json:"nome_projeto"`
+	TipoAnalise string `json:"tipo_analise"`
+	Amostra     string `json:"amostra"`
+	Quantidade  int    `json:"quantidade"`
+}
+
 func sendError(ctx *gin.Context, code int, msg string) {
 	ctx.Header("Content-type", "application/json")
 	ctx.JSON(code, gin.H{

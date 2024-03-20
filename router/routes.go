@@ -30,6 +30,8 @@ func initializeRoutes(r *gin.Engine) {
 
 	lote := v1.Group("lote")
 	{
+		lote.GET("", handler.GetLotes)
+
 		lote.POST("", handler.PostLote)
 	}
 }
