@@ -34,4 +34,9 @@ func initializeRoutes(r *gin.Engine) {
 
 		lote.POST("", handler.PostLote)
 	}
+
+	estoque := v1.Group("estoque")
+	{
+		estoque.POST("", handler.PostEstoque)
+	}
 }

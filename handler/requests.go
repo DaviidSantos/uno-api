@@ -130,3 +130,15 @@ func (r *CreateLoteRequest) Validate() error {
 
 	return nil
 }
+
+type CreateEstoqueRequest struct {
+	Local string `json:"local"`
+}
+
+func (r *CreateEstoqueRequest) Validate() error {
+	if r.Local == "" {
+		return errParamIsRequired("local", "string")
+	}
+
+	return nil
+}
