@@ -39,6 +39,18 @@ type LoteResponse struct {
 	Quantidade  int    `json:"quantidade"`
 }
 
+type ReagenteResponse struct {
+	IdReagente int        `json:"id_reagente"`
+	Estoque    string     `json:"estoque"`
+	Nome       string     `json:"nome"`
+	Fornecedor string     `json:"fornecedor"`
+	Descricao  string     `json:"descricao"`
+	Unidade    string     `json:"unidade"`
+	Quantidade string     `json:"quantidade"`
+	NotaFiscal string     `json:"nota_fiscal"`
+	Validade   *time.Time `json:"validade"`
+}
+
 func sendError(ctx *gin.Context, code int, msg string) {
 	ctx.Header("Content-type", "application/json")
 	ctx.JSON(code, gin.H{

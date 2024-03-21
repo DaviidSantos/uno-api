@@ -8,6 +8,42 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
+func GetReagentes(ctx *gin.Context) {
+	query := `SELECT
+							r.id_reagente, e.local, r.nome, r.fornecedor,
+							r.descricao, r.unidade, r.quantidade, r.nota_fiscal, r.validade
+						FROM reagente r
+						INNER JOIN estoque e
+							ON e.id_estoque = r.id_estoque`
+
+	rows, err := db.Query(context.Background(), query)
+
+	if err != nil {
+		logger.Errorf("error selecting reagentes: %v", err.Error())
+		sendError(ctx, http.StatusInternalServerError, "error selecting reagentes")
+		return
+	}
+	defer rows.Close()
+
+	var reagentes []ReagenteResponse
+
+	if rows.Next() {
+		var reagente ReagenteResponse
+
+		err := rows.Scan(&reagente.IdReagente, &reagente.Estoque, &reagente.Nome, &reagente.Fornecedor, &reagente.Descricao, &reagente.Unidade, &reagente.Quantidade, &reagente.NotaFiscal, &reagente.Validade)
+
+		if err != nil {
+			logger.Errorf("error looping result set: %v", err.Error())
+			sendError(ctx, http.StatusInternalServerError, "error selecting reagentes")
+			return
+		}
+
+		reagentes = append(reagentes, reagente)
+	}
+
+	sendSuccess(ctx, "get-reagentes", reagentes)
+}
+
 func PostReagente(ctx *gin.Context) {
 	request := CreateReagenteRequest{}
 

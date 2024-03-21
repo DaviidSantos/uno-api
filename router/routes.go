@@ -42,6 +42,8 @@ func initializeRoutes(r *gin.Engine) {
 
 	reagente := v1.Group("reagente")
 	{
+		reagente.GET("", handler.GetReagentes)
+
 		reagente.POST("", handler.PostReagente)
 	}
 }
