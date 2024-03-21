@@ -142,3 +142,46 @@ func (r *CreateEstoqueRequest) Validate() error {
 
 	return nil
 }
+
+type CreateReagenteRequest struct {
+	IdEstoque  int        `json:"id_estoque"`
+	Nome       string     `json:"nome"`
+	Fornecedor string     `json:"fornecedor"`
+	Descricao  string     `json:"descricao"`
+	Unidade    string     `json:"unidade"`
+	Quantidade int        `json:"quantidade"`
+	NotaFiscal string     `json:"nota_fiscal"`
+	Validade   string `json:"validade"`
+}
+
+func (r *CreateReagenteRequest) Validate() error {
+	if r.IdEstoque == 0 {
+		return errParamIsRequired("id_estoque", "int")
+	}
+
+	if r.Nome == "" {
+		return errParamIsRequired("nome", "string")
+	}
+
+	if r.Fornecedor == "" {
+		return errParamIsRequired("fornecedor", "string")
+	}
+
+	if r.Unidade == "" {
+		return errParamIsRequired("unidade", "string")
+	}
+
+	if r.NotaFiscal == "" {
+		return errParamIsRequired("nota_fiscal", "string")
+	}
+
+	_, err := time.Parse("2006-01-02", r.Validade)
+
+	if err != nil {
+		logger.Errorf("error parsing validade: %v", err.Error())
+		return errParamMalformed("validade", "date")
+	}
+
+
+	return nil
+}
