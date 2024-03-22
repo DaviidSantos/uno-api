@@ -46,4 +46,9 @@ func initializeRoutes(r *gin.Engine) {
 
 		reagente.POST("", handler.PostReagente)
 	}
+
+	analise := v1.Group("analise")
+	{
+		analise.POST("", handler.PostAnalise)
+	}
 }

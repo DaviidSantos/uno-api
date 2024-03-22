@@ -144,13 +144,13 @@ func (r *CreateEstoqueRequest) Validate() error {
 }
 
 type CreateReagenteRequest struct {
-	IdEstoque  int        `json:"id_estoque"`
-	Nome       string     `json:"nome"`
-	Fornecedor string     `json:"fornecedor"`
-	Descricao  string     `json:"descricao"`
-	Unidade    string     `json:"unidade"`
-	Quantidade int        `json:"quantidade"`
-	NotaFiscal string     `json:"nota_fiscal"`
+	IdEstoque  int    `json:"id_estoque"`
+	Nome       string `json:"nome"`
+	Fornecedor string `json:"fornecedor"`
+	Descricao  string `json:"descricao"`
+	Unidade    string `json:"unidade"`
+	Quantidade int    `json:"quantidade"`
+	NotaFiscal string `json:"nota_fiscal"`
 	Validade   string `json:"validade"`
 }
 
@@ -182,6 +182,27 @@ func (r *CreateReagenteRequest) Validate() error {
 		return errParamMalformed("validade", "date")
 	}
 
+	return nil
+}
+
+type CreateAnaliseRequest struct {
+	IdLote        int     `json:"id_lote"`
+	IdEnsaio      int     `json:"id_ensaio"`
+	Especificacao float64 `json:"especificacao"`
+}
+
+func (r *CreateAnaliseRequest) Validate() error {
+	if r.IdLote == 0 {
+		return errParamIsRequired("id_lote", "int")
+	}
+
+	if r.IdEnsaio == 0 {
+		return errParamIsRequired("id_ensaio", "int")
+	}
+
+	if r.Especificacao == 0.0 {
+		return errParamIsRequired("especificacao", "float64")
+	}
 
 	return nil
 }
