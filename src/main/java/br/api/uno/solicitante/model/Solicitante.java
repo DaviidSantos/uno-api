@@ -47,4 +47,14 @@ public class Solicitante implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "solicitante")
     private Set<SolicitacaoAnalise> solicitacoesAnalise = new HashSet<>();
+
+    public Solicitante(String cnpj, String nome, String telefone, String email, String endereco, String cidade, String estado) {
+        this.cnpj = cnpj;
+        this.nome = nome;
+        this.telefone = telefone;
+        this.email = email;
+        this.endereco = endereco;
+        this.cidade = cidade;
+        this.estado = estado;
+    }
 }
