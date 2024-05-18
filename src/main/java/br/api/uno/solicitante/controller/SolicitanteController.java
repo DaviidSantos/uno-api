@@ -16,7 +16,6 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/solicitante")
@@ -29,21 +28,37 @@ public class SolicitanteController {
 
     @PostMapping
     public ResponseEntity cadastrarSolicitante(@RequestBody @Valid SolicitanteDTO dto, UriComponentsBuilder uriBuilder) {
-        UUID id = service.cadastrarSolicitante(dto);
+        service.cadastrarSolicitante(dto);
 
-        URI uri = uriBuilder.path("/solicitante/{id}").buildAndExpand(id).toUri();
+        URI uri = uriBuilder.path("api/v1/solicitante").queryParam("cnpj", "{cnpj}").buildAndExpand(dto.cnpj()).toUri();
+
         return ResponseEntity.created(uri).build();
     }
 
-    @GetMapping
+    @GetMapping("/listagem")
     public ResponseEntity<List<SolicitanteDTO>> listarSolicitantes() {
         List<SolicitanteDTO> dtos = service.listarSolicitantes();
         return ResponseEntity.ok().body(dtos);
     }
 
+    @GetMapping
+    public ResponseEntity<SolicitanteDTO> buscarSolicitantePorCnpj(@RequestParam String cnpj) {
+        SolicitanteDTO obj = service.buscarSolicitantePorCnpj(cnpj);
+        return ResponseEntity.ok().body(obj);
+    }
+
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(CnpjAlreadyRegisteredException.class)
     protected Map<String, String> handleAlreadyRegisteredCnpj(RuntimeException ex, WebRequest request) {
+        Map<String, String> error = new HashMap<>();
+        error.put("erro", ex.getMessage());
+
+        return error;
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(CnpjAlreadyRegisteredException.class)
+    protected Map<String, String> handleSolicitanteNotFound(RuntimeException ex, WebRequest request) {
         Map<String, String> error = new HashMap<>();
         error.put("erro", ex.getMessage());
 
