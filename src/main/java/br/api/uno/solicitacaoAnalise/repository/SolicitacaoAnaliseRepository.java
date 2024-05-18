@@ -8,4 +8,6 @@ import java.util.UUID;
 
 public interface SolicitacaoAnaliseRepository extends JpaRepository<SolicitacaoAnalise, UUID> {
     Optional<SolicitacaoAnalise> findByIdSa(String idSa);
+
+    int countByIdSaEndingWith(int anoAtual);
 }
