@@ -14,7 +14,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.Year;
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class SolicitacaoAnaliseService {
@@ -73,7 +74,24 @@ public class SolicitacaoAnaliseService {
 
     public SolicitacaoAnaliseDTO buscarSolicitacaoAnalisePorIdSa(String idSa) {
         SolicitacaoAnalise solicitacaoAnalise = repository.findByIdSa(idSa).orElseThrow(() -> new SolicitacaoAnaliseNotFoundException(String.format("Solicitação de Análise com id %s não foi encontrada!", idSa)));
+        SolicitacaoAnaliseDTO dto = entityToDTO(solicitacaoAnalise);
 
+        return dto;
+    }
+
+    public List<SolicitacaoAnaliseDTO> listarSolicitacoesAnalise() {
+        List<SolicitacaoAnalise> solicitacoesAnalise = repository.findAll();
+        List<SolicitacaoAnaliseDTO> dtos = new ArrayList<>();
+
+        for (SolicitacaoAnalise solicitacaoAnalise : solicitacoesAnalise) {
+            SolicitacaoAnaliseDTO dto = entityToDTO(solicitacaoAnalise);
+            dtos.add(dto);
+        }
+
+        return dtos;
+    }
+
+    private SolicitacaoAnaliseDTO entityToDTO(SolicitacaoAnalise solicitacaoAnalise) {
         SolicitanteDTO solicitanteDTO = new SolicitanteDTO(
                 solicitacaoAnalise.getSolicitante().getId(),
                 solicitacaoAnalise.getSolicitante().getCnpj(),
@@ -85,7 +103,7 @@ public class SolicitacaoAnaliseService {
                 solicitacaoAnalise.getSolicitante().getEstado()
         );
 
-        SolicitacaoAnaliseDTO dto = new SolicitacaoAnaliseDTO(
+        return new SolicitacaoAnaliseDTO(
                 solicitacaoAnalise.getId(),
                 solicitacaoAnalise.getIdSa(),
                 solicitacaoAnalise.getNomeProjeto(),
@@ -95,7 +113,5 @@ public class SolicitacaoAnaliseService {
                 solicitacaoAnalise.getDescricaoProjeto(),
                 solicitanteDTO
         );
-
-        return dto;
     }
 }

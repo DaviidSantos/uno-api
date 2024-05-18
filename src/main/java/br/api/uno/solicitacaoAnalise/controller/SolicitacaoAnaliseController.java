@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.UUID;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/solicitacao-analise")
@@ -33,5 +33,11 @@ public class SolicitacaoAnaliseController {
         SolicitacaoAnaliseDTO dto = service.buscarSolicitacaoAnalisePorIdSa(id_sa);
 
         return ResponseEntity.ok(dto);
+    }
+
+    @GetMapping("/listagem")
+    public ResponseEntity<List<SolicitacaoAnaliseDTO>> listarSolicitacoesAnalise() {
+        List<SolicitacaoAnaliseDTO> dtos = service.listarSolicitacoesAnalise();
+        return ResponseEntity.ok(dtos);
     }
 }
