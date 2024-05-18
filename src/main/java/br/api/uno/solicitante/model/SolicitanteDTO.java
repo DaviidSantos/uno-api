@@ -4,7 +4,11 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
+import java.util.UUID;
+
 public record SolicitanteDTO(
+        UUID id,
+
         @NotNull(message = "Campo CNPJ é obrigatório!")
         @Pattern(regexp = "\\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2}", message = "Formato do CNPJ inválido! Formato: XX.XXX.XXX/XXXX-XX")
         String cnpj,

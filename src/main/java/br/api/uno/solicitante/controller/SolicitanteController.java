@@ -14,6 +14,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -32,6 +33,12 @@ public class SolicitanteController {
 
         URI uri = uriBuilder.path("/solicitante/{id}").buildAndExpand(id).toUri();
         return ResponseEntity.created(uri).build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<SolicitanteDTO>> listarSolicitantes() {
+        List<SolicitanteDTO> dtos = service.listarSolicitantes();
+        return ResponseEntity.ok().body(dtos);
     }
 
     @ResponseStatus(HttpStatus.CONFLICT)

@@ -6,6 +6,8 @@ import br.api.uno.solicitante.model.exceptions.CnpjAlreadyRegisteredException;
 import br.api.uno.solicitante.repository.SolicitanteRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -25,5 +27,24 @@ public class SolicitanteService {
 
         solicitante = repository.save(solicitante);
         return solicitante.getId();
+    }
+
+    public List<SolicitanteDTO> listarSolicitantes() {
+        List<Solicitante> solicitantes = repository.findAll();
+        List<SolicitanteDTO> solicitanteDTOs = new ArrayList<>();
+        for (Solicitante solicitante : solicitantes) {
+            SolicitanteDTO solicitanteDTO = new SolicitanteDTO(solicitante.getId(),
+                    solicitante.getCnpj(),
+                    solicitante.getNome(),
+                    solicitante.getTelefone(),
+                    solicitante.getEmail(),
+                    solicitante.getEndereco(),
+                    solicitante.getCidade(),
+                    solicitante.getEstado());
+
+            solicitanteDTOs.add(solicitanteDTO);
+        }
+
+        return solicitanteDTOs;
     }
 }
