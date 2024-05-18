@@ -1,5 +1,6 @@
 package br.api.uno.solicitacaoAnalise.service;
 
+import br.api.uno.solicitacaoAnalise.exceptions.SolicitacaoAnaliseNotFoundException;
 import br.api.uno.solicitacaoAnalise.model.SolicitacaoAnalise;
 import br.api.uno.solicitacaoAnalise.model.SolicitacaoAnaliseDTO;
 import br.api.uno.solicitacaoAnalise.model.enums.TipoAnalise;
@@ -25,7 +26,7 @@ public class SolicitacaoAnaliseService {
         this.solicitanteService = solicitanteService;
     }
 
-    public UUID cadastrarSolicitacaoAnalise(SolicitacaoAnaliseDTO dto) {
+    public String cadastrarSolicitacaoAnalise(SolicitacaoAnaliseDTO dto) {
         if(dto.solicitante().cnpj() == null) {
             throw new MissingFieldException("Campo CNPJ do Solicitante é obrigatório!");
         }
@@ -56,6 +57,7 @@ public class SolicitacaoAnaliseService {
         SolicitacaoAnalise solicitacaoAnalise = new SolicitacaoAnalise(
                 null,
                 idSa,
+                dto.nomeProjeto(),
                 TipoAnalise.valueOf(dto.tipoAnalise()),
                 dto.prazoAcordado(),
                 null,
@@ -64,7 +66,36 @@ public class SolicitacaoAnaliseService {
                 null
         );
 
-        return repository.save(solicitacaoAnalise).getId();
+        repository.save(solicitacaoAnalise);
+
+        return idSa;
     }
 
+    public SolicitacaoAnaliseDTO buscarSolicitacaoAnalisePorIdSa(String idSa) {
+        SolicitacaoAnalise solicitacaoAnalise = repository.findByIdSa(idSa).orElseThrow(() -> new SolicitacaoAnaliseNotFoundException(String.format("Solicitação de Análise com id %s não foi encontrada!", idSa)));
+
+        SolicitanteDTO solicitanteDTO = new SolicitanteDTO(
+                solicitacaoAnalise.getSolicitante().getId(),
+                solicitacaoAnalise.getSolicitante().getCnpj(),
+                solicitacaoAnalise.getSolicitante().getNome(),
+                solicitacaoAnalise.getSolicitante().getTelefone(),
+                solicitacaoAnalise.getSolicitante().getEmail(),
+                solicitacaoAnalise.getSolicitante().getEndereco(),
+                solicitacaoAnalise.getSolicitante().getCidade(),
+                solicitacaoAnalise.getSolicitante().getEstado()
+        );
+
+        SolicitacaoAnaliseDTO dto = new SolicitacaoAnaliseDTO(
+                solicitacaoAnalise.getId(),
+                solicitacaoAnalise.getIdSa(),
+                solicitacaoAnalise.getNomeProjeto(),
+                solicitacaoAnalise.getTipoAnalise().toString(),
+                solicitacaoAnalise.getPrazoAcordado(),
+                solicitacaoAnalise.getConclusaoProjeto(),
+                solicitacaoAnalise.getDescricaoProjeto(),
+                solicitanteDTO
+        );
+
+        return dto;
+    }
 }

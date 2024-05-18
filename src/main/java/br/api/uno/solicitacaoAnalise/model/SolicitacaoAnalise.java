@@ -29,6 +29,9 @@ public class SolicitacaoAnalise implements Serializable {
     @Column(nullable = false, unique = true)
     private String idSa;
 
+    @Column(nullable = false)
+    private String nomeProjeto;
+
     private TipoAnalise tipoAnalise;
 
     @Column(nullable = false)

@@ -1,5 +1,6 @@
 package br.api.uno.utils;
 
+import br.api.uno.solicitacaoAnalise.exceptions.SolicitacaoAnaliseNotFoundException;
 import br.api.uno.solicitante.model.exceptions.CnpjAlreadyRegisteredException;
 import br.api.uno.solicitante.model.exceptions.SolicitanteNotFoundException;
 import br.api.uno.utils.exceptions.InvalidFieldValueException;
@@ -59,6 +60,15 @@ public class ControllerAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(InvalidFieldValueException.class)
     protected Map<String, String> handleInvalidFieldValueException(RuntimeException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("erro", ex.getMessage());
+
+        return error;
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(SolicitacaoAnaliseNotFoundException.class)
+    protected Map<String, String> handleSolicitacaoAnaliseNotFoundException(RuntimeException ex) {
         Map<String, String> error = new HashMap<>();
         error.put("erro", ex.getMessage());
 
