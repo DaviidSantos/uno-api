@@ -1,0 +1,32 @@
+package br.api.uno.lote.controller;
+
+import br.api.uno.lote.model.LoteDTO;
+import br.api.uno.lote.service.LoteService;
+import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
+import java.util.UUID;
+
+@RestController
+@RequestMapping("/api/v1/lote")
+public class LoteController {
+    private final LoteService service;
+
+    public LoteController(LoteService service) {
+        this.service = service;
+    }
+
+    @PostMapping
+    public ResponseEntity cadastrarLote(@RequestBody @Valid LoteDTO dto, UriComponentsBuilder uriBuilder) {
+        UUID id = service.cadastrarLote(dto);
+
+        URI uri = uriBuilder.path("/lote/{id}").buildAndExpand(id).toUri();
+        return ResponseEntity.created(uri).build();
+    }
+}

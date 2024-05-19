@@ -28,7 +28,7 @@ public class Lote implements Serializable {
     @Column(nullable = false)
     private String amostra;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String notaFiscal;
 
     @Column(nullable = false)

@@ -7,4 +7,5 @@ import java.util.UUID;
 
 public interface LoteRepository extends JpaRepository<Lote, UUID> {
 
+    boolean existsByNotaFiscal(String notaFiscal);
 }
