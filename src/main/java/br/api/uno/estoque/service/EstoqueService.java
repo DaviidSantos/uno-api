@@ -3,6 +3,7 @@ package br.api.uno.estoque.service;
 import br.api.uno.estoque.model.Estoque;
 import br.api.uno.estoque.model.EstoqueDTO;
 import br.api.uno.estoque.model.exceptions.EstoqueAlreadyRegisteredException;
+import br.api.uno.estoque.model.exceptions.EstoqueNotFoundException;
 import br.api.uno.estoque.repository.EstoqueRepository;
 import org.springframework.stereotype.Service;
 
@@ -45,5 +46,9 @@ public class EstoqueService {
         }
 
         return dtos;
+    }
+
+    public Estoque buscarEstoque(String nome) {
+        return repository.findByNome(nome).orElseThrow(() -> new EstoqueNotFoundException(String.format("Estoque %s não encontrado!", nome)));
     }
 }
