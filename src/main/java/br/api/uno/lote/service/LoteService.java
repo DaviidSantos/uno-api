@@ -92,4 +92,11 @@ public class LoteService {
 
         return dto;
     }
+
+    public void retirarAmostraLote(UUID id, int quantidade) {
+        Lote lote = repository.findById(id).orElseThrow(() -> new LoteNotFoundException("Lote não encontrado!"));
+
+        lote.retirarAmostra(quantidade);
+        repository.save(lote);
+    }
 }
