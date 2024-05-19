@@ -11,6 +11,8 @@ import br.api.uno.lote.model.LoteDTO;
 import br.api.uno.lote.service.LoteService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -58,5 +60,48 @@ public class AnaliseService {
         );
 
         return repository.save(analise).getId();
+    }
+
+    public List<AnaliseDTO> listarAnalises() {
+        List<Analise> analises = repository.findAll();
+
+        List<AnaliseDTO> dtos = new ArrayList<>();
+
+        for (Analise analise : analises) {
+            AnaliseDTO dto = entityToDTO(analise);
+            dtos.add(dto);
+        }
+
+        return dtos;
+    }
+
+    private AnaliseDTO entityToDTO(Analise analise) {
+        EnsaioDTO ensaioDTO = new EnsaioDTO(
+                analise.getEnsaio().getId(),
+                analise.getEnsaio().getNome()
+        );
+
+        LoteDTO loteDTO = new LoteDTO(
+                analise.getLote().getId(),
+                analise.getLote().getAmostra(),
+                analise.getLote().getNotaFiscal(),
+                analise.getLote().getDataEntrada(),
+                analise.getLote().getDataValidade(),
+                analise.getLote().getDescricao(),
+                analise.getLote().getQuantidade(),
+                null
+        );
+
+        AnaliseDTO dto = new AnaliseDTO(
+                analise.getId(),
+                analise.getEspecificacao(),
+                analise.getResultado(),
+                analise.getUnidade(),
+                analise.getObservacao(),
+                loteDTO,
+                ensaioDTO
+        );
+
+        return dto;
     }
 }
