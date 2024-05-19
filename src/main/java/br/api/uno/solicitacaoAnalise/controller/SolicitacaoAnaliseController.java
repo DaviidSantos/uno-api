@@ -40,4 +40,10 @@ public class SolicitacaoAnaliseController {
         List<SolicitacaoAnaliseDTO> dtos = service.listarSolicitacoesAnalise();
         return ResponseEntity.ok(dtos);
     }
+
+    @PatchMapping
+    public ResponseEntity atualizarSolicitacaoAnalise(@RequestBody SolicitacaoAnaliseDTO dto) {
+        service.atualizarSolicitatacaoAnalise(dto);
+        return ResponseEntity.ok().build();
+    }
 }

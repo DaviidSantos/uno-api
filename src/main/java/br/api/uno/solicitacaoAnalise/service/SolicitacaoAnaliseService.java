@@ -91,6 +91,21 @@ public class SolicitacaoAnaliseService {
         return dtos;
     }
 
+    public void atualizarSolicitatacaoAnalise(SolicitacaoAnaliseDTO dto) {
+        SolicitacaoAnalise solicitacaoAnalise = repository.findByIdSa(dto.idSa()).orElseThrow(() -> new SolicitacaoAnaliseNotFoundException(String.format("Solicitação de Análise com id %s não foi encontrada!", dto.idSa())));
+
+        setSolicitacaoAnalise(solicitacaoAnalise, dto);
+
+        repository.save(solicitacaoAnalise);
+    }
+
+    private void setSolicitacaoAnalise(SolicitacaoAnalise solicitacaoAnalise, SolicitacaoAnaliseDTO dto) {
+        solicitacaoAnalise.setNomeProjeto(dto.nomeProjeto());
+        solicitacaoAnalise.setTipoAnalise(TipoAnalise.valueOf(dto.tipoAnalise()));
+        solicitacaoAnalise.setConclusaoProjeto(dto.conclusaoProjeto());
+        solicitacaoAnalise.setDescricaoProjeto(dto.descricaoProjeto());
+    }
+
     private SolicitacaoAnaliseDTO entityToDTO(SolicitacaoAnalise solicitacaoAnalise) {
         SolicitanteDTO solicitanteDTO = new SolicitanteDTO(
                 solicitacaoAnalise.getSolicitante().getId(),
