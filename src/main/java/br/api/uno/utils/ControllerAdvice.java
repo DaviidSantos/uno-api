@@ -1,5 +1,6 @@
 package br.api.uno.utils;
 
+import br.api.uno.lote.model.exceptions.LoteNotFoundException;
 import br.api.uno.lote.model.exceptions.NotaFiscalAlreadyRegisteredException;
 import br.api.uno.solicitacaoAnalise.exceptions.SolicitacaoAnaliseNotFoundException;
 import br.api.uno.solicitante.model.exceptions.CnpjAlreadyRegisteredException;
@@ -58,6 +59,24 @@ public class ControllerAdvice {
         return error;
     }
 
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(SolicitacaoAnaliseNotFoundException.class)
+    protected Map<String, String> handleSolicitacaoAnaliseNotFoundException(RuntimeException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("erro", ex.getMessage());
+
+        return error;
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(LoteNotFoundException.class)
+    protected Map<String, String> handleLoteNotFoundException(RuntimeException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("erro", ex.getMessage());
+
+        return error;
+    }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MissingFieldException.class)
     protected Map<String, String> handleMissingFieldException(RuntimeException ex) {
@@ -76,12 +95,5 @@ public class ControllerAdvice {
         return error;
     }
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(SolicitacaoAnaliseNotFoundException.class)
-    protected Map<String, String> handleSolicitacaoAnaliseNotFoundException(RuntimeException ex) {
-        Map<String, String> error = new HashMap<>();
-        error.put("erro", ex.getMessage());
 
-        return error;
-    }
 }

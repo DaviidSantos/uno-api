@@ -2,6 +2,7 @@ package br.api.uno.lote.service;
 
 import br.api.uno.lote.model.Lote;
 import br.api.uno.lote.model.LoteDTO;
+import br.api.uno.lote.model.exceptions.LoteNotFoundException;
 import br.api.uno.lote.model.exceptions.NotaFiscalAlreadyRegisteredException;
 import br.api.uno.lote.repository.LoteRepository;
 import br.api.uno.solicitacaoAnalise.model.SolicitacaoAnalise;
@@ -62,5 +63,33 @@ public class LoteService {
 
         lote = repository.save(lote);
         return lote.getId();
+    }
+
+    public LoteDTO buscarLotePorId(UUID id) {
+        Lote lote = repository.findById(id).orElseThrow(() -> new LoteNotFoundException("Lote não encontrado!"));
+
+        SolicitacaoAnaliseDTO solicitacaoAnaliseDTO = new SolicitacaoAnaliseDTO(
+                lote.getSolicitacaoAnalise().getId(),
+                lote.getSolicitacaoAnalise().getIdSa(),
+                lote.getSolicitacaoAnalise().getNomeProjeto(),
+                lote.getSolicitacaoAnalise().getTipoAnalise().toString(),
+                lote.getSolicitacaoAnalise().getPrazoAcordado(),
+                lote.getSolicitacaoAnalise().getConclusaoProjeto(),
+                lote.getSolicitacaoAnalise().getDescricaoProjeto(),
+                null
+        );
+
+        LoteDTO dto = new LoteDTO(
+                lote.getId(),
+                lote.getAmostra(),
+                lote.getNotaFiscal(),
+                lote.getDataEntrada(),
+                lote.getDataValidade(),
+                lote.getDescricao(),
+                lote.getQuantidade(),
+                solicitacaoAnaliseDTO
+        );
+
+        return dto;
     }
 }
