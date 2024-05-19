@@ -2,6 +2,7 @@ package br.api.uno.analise.service;
 
 import br.api.uno.analise.model.Analise;
 import br.api.uno.analise.model.AnaliseDTO;
+import br.api.uno.analise.model.exceptions.AnaliseNotFoundException;
 import br.api.uno.analise.repository.AnaliseRepository;
 import br.api.uno.ensaio.model.Ensaio;
 import br.api.uno.ensaio.model.EnsaioDTO;
@@ -59,6 +60,7 @@ public class AnaliseService {
                 ensaio
         );
 
+        loteService.retirarAmostraLote(lote.getId(), 1);
         return repository.save(analise).getId();
     }
 
@@ -73,6 +75,10 @@ public class AnaliseService {
         }
 
         return dtos;
+    }
+
+    public Analise buscarAnalisePorId(UUID id) {
+        return repository.findById(id).orElseThrow(() -> new AnaliseNotFoundException("Analise não encontrada!"));
     }
 
     private AnaliseDTO entityToDTO(Analise analise) {

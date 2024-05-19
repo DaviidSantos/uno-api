@@ -1,9 +1,11 @@
 package br.api.uno.utils;
 
+import br.api.uno.analise.model.exceptions.AnaliseNotFoundException;
 import br.api.uno.ensaio.model.exceptions.EnsaioNotFoundException;
 import br.api.uno.estoque.model.exceptions.EstoqueAlreadyRegisteredException;
 import br.api.uno.lote.model.exceptions.LoteNotFoundException;
 import br.api.uno.lote.model.exceptions.NotaFiscalAlreadyRegisteredException;
+import br.api.uno.reagente.exceptions.ReagenteNotFoundException;
 import br.api.uno.solicitacaoAnalise.exceptions.SolicitacaoAnaliseNotFoundException;
 import br.api.uno.solicitante.model.exceptions.CnpjAlreadyRegisteredException;
 import br.api.uno.solicitante.model.exceptions.SolicitanteNotFoundException;
@@ -91,6 +93,24 @@ public class ControllerAdvice {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(EnsaioNotFoundException.class)
     protected Map<String, String> handleEnsaioNotFoundException(RuntimeException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("erro", ex.getMessage());
+
+        return error;
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(ReagenteNotFoundException.class)
+    protected Map<String, String> handleReagenteNotFoundException(RuntimeException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("erro", ex.getMessage());
+
+        return error;
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(AnaliseNotFoundException.class)
+    protected Map<String, String> handleAnaliseNotFoundException(RuntimeException ex) {
         Map<String, String> error = new HashMap<>();
         error.put("erro", ex.getMessage());
 
