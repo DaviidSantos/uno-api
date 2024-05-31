@@ -36,8 +36,8 @@ public class SolicitacaoAnaliseController {
         return ResponseEntity.ok(dto);
     }
 
-    @GetMapping("{cnpj}")
-    public ResponseEntity<List<SolicitacaoAnaliseDTO>> buscarSolicitacaoAnalisePorCnpj(@PathVariable String cnpj) {
+    @GetMapping("/solicitante")
+    public ResponseEntity<List<SolicitacaoAnaliseDTO>> buscarSolicitacaoAnalisePorSolicitante(@RequestParam String cnpj) {
         List<SolicitacaoAnaliseDTO> dtos = service.buscarSolicitacaoAnalisePorSolicitante(cnpj);
 
         return ResponseEntity.ok(dtos);
