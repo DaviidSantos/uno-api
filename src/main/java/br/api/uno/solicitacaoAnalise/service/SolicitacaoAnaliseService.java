@@ -79,6 +79,31 @@ public class SolicitacaoAnaliseService {
         return dto;
     }
 
+    public List<SolicitacaoAnaliseDTO> buscarSolicitacaoAnalisePorSolicitante(String cnpj) {
+        SolicitanteDTO solicitanteDTO = solicitanteService.buscarSolicitantePorCnpj(cnpj);
+        Solicitante solicitante = new Solicitante(
+                solicitanteDTO.id(),
+                solicitanteDTO.cnpj(),
+                solicitanteDTO.nome(),
+                solicitanteDTO.telefone(),
+                solicitanteDTO.email(),
+                solicitanteDTO.endereco(),
+                solicitanteDTO.cidade(),
+                solicitanteDTO.estado(),
+                null
+        );
+
+        List<SolicitacaoAnalise> solicitacoesAnalise = repository.findAllBySolicitante(solicitante);
+        List<SolicitacaoAnaliseDTO> dtos = new ArrayList<>();
+
+        for (SolicitacaoAnalise solicitacaoAnalise : solicitacoesAnalise) {
+            SolicitacaoAnaliseDTO dto = entityToDTO(solicitacaoAnalise);
+            dtos.add(dto);
+        }
+
+        return dtos;
+    }
+
     public List<SolicitacaoAnaliseDTO> listarSolicitacoesAnalise() {
         List<SolicitacaoAnalise> solicitacoesAnalise = repository.findAll();
         List<SolicitacaoAnaliseDTO> dtos = new ArrayList<>();
