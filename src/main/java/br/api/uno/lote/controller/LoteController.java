@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 import java.util.UUID;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -33,5 +34,11 @@ public class LoteController {
         LoteDTO dto = service.buscarLotePorId(id);
 
         return ResponseEntity.ok(dto);
+    }
+
+    @GetMapping("/solicitacao-analise")
+    public ResponseEntity<List<LoteDTO>> buscarLotePorSolicitacaoAnalise(@RequestParam String idSa) {
+        List<LoteDTO> dtos = service.buscarLotesPorSolicitacaoAnalise(idSa);
+        return ResponseEntity.ok(dtos);
     }
 }

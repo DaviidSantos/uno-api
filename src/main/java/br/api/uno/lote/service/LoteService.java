@@ -13,6 +13,8 @@ import br.api.uno.utils.exceptions.InvalidFieldValueException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -63,6 +65,41 @@ public class LoteService {
 
         lote = repository.save(lote);
         return lote.getId();
+    }
+
+    public List<LoteDTO> buscarLotesPorSolicitacaoAnalise(String idSa) {
+        SolicitacaoAnaliseDTO solicitacaoAnaliseDTO = solicitacaoAnaliseService.buscarSolicitacaoAnalisePorIdSa(idSa);
+        SolicitacaoAnalise solicitacaoAnalise = new SolicitacaoAnalise(
+                solicitacaoAnaliseDTO.id(),
+                solicitacaoAnaliseDTO.idSa(),
+                solicitacaoAnaliseDTO.nomeProjeto(),
+                TipoAnalise.valueOf(solicitacaoAnaliseDTO.tipoAnalise()),
+                solicitacaoAnaliseDTO.prazoAcordado(),
+                solicitacaoAnaliseDTO.conclusaoProjeto(),
+                solicitacaoAnaliseDTO.descricaoProjeto(),
+                null,
+                null
+        );
+        
+        List<Lote> lotes = repository.findAllBySolicitacaoAnalise(solicitacaoAnalise);
+        List<LoteDTO> dtos = new ArrayList<>();
+        
+        for (Lote lote : lotes) {
+            LoteDTO dto = new LoteDTO(
+                    lote.getId(),
+                    lote.getAmostra(),
+                    lote.getNotaFiscal(),
+                    lote.getDataEntrada(),
+                    lote.getDataValidade(),
+                    lote.getDescricao(),
+                    lote.getQuantidade(),
+                    solicitacaoAnaliseDTO
+            );
+            
+            dtos.add(dto);
+        }
+        
+        return dtos;
     }
 
     public LoteDTO buscarLotePorId(UUID id) {
