@@ -64,8 +64,22 @@ public class AnaliseService {
         return repository.save(analise).getId();
     }
 
-    public List<AnaliseDTO> listarAnalises() {
-        List<Analise> analises = repository.findAll();
+    public List<AnaliseDTO> listarAnalisesPorLote(String loteId) {
+        LoteDTO loteDTO = loteService.buscarLotePorId(UUID.fromString(loteId));
+
+        Lote lote = new Lote(
+                loteDTO.id(),
+                loteDTO.amostra(),
+                loteDTO.notaFiscal(),
+                loteDTO.dataEntrada(),
+                loteDTO.dataValidade(),
+                loteDTO.descricao(),
+                loteDTO.quantidade(),
+                null,
+                null
+        );
+
+        List<Analise> analises = repository.findAllByLote(lote);
 
         List<AnaliseDTO> dtos = new ArrayList<>();
 
@@ -98,7 +112,7 @@ public class AnaliseService {
                 null
         );
 
-        AnaliseDTO dto = new AnaliseDTO(
+        return new AnaliseDTO(
                 analise.getId(),
                 analise.getEspecificacao(),
                 analise.getResultado(),
@@ -107,7 +121,5 @@ public class AnaliseService {
                 loteDTO,
                 ensaioDTO
         );
-
-        return dto;
     }
 }

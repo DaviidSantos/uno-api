@@ -30,9 +30,9 @@ public class AnaliseController {
         return ResponseEntity.created(uri).build();
     }
 
-    @GetMapping
-    public ResponseEntity<List<AnaliseDTO>> listarAnalises() {
-        List<AnaliseDTO> list = service.listarAnalises();
+    @GetMapping("{idLote}")
+    public ResponseEntity<List<AnaliseDTO>> listarAnalises(@PathVariable String idLote) {
+        List<AnaliseDTO> list = service.listarAnalisesPorLote(idLote);
         return ResponseEntity.ok(list);
     }
 }
