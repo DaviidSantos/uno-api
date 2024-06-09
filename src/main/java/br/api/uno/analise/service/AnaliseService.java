@@ -53,7 +53,7 @@ public class AnaliseService {
         Analise analise = new Analise(
                 null,
                 dto.especificacao(),
-                null,
+                dto.resultado(),
                 dto.unidade(),
                 dto.observacao(),
                 lote,
