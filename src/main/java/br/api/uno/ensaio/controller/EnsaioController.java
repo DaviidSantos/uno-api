@@ -6,6 +6,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/api/v1/ensaio")
@@ -20,5 +22,10 @@ public class EnsaioController {
     public ResponseEntity cadastrarEnsaio(@RequestBody @Valid EnsaioDTO ensaio) {
         service.cadastrarEnsaio(ensaio);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<EnsaioDTO>> listarEnsaios() {
+        return ResponseEntity.ok(service.listarEnsaios());
     }
 }
