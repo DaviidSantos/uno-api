@@ -6,10 +6,10 @@ import jakarta.validation.constraints.NotNull;
 
 public record ReagenteAnaliseDTO(
         @NotNull(message = "Campo Reagente é obrigatório!")
-        ReagenteDTO reagente,
+        String reagente_id,
 
         @NotNull(message = "Campo Analise é obrigatório!")
-        AnaliseDTO analise,
+        String analise_id,
 
         @NotNull(message = "Campo Quantidade Utilizada é obrigatório!")
         Double quantidade

@@ -32,8 +32,8 @@ public class ReagenteAnaliseService {
     }
 
     public void cadastrarReagenteUsado(ReagenteAnaliseDTO dto) {
-        Reagente reagente = reagenteService.buscarReagentePorId(dto.reagente().id());
-        Analise analise = analiseService.buscarAnalisePorId(dto.analise().id());
+        Reagente reagente = reagenteService.buscarReagentePorId(UUID.fromString(dto.reagente_id()));
+        Analise analise = analiseService.buscarAnalisePorId(UUID.fromString(dto.analise_id()));
 
         ReagenteAnalisePK pk = new ReagenteAnalisePK();
         pk.setReagente(reagente);
@@ -46,12 +46,15 @@ public class ReagenteAnaliseService {
     }
 
     public List<ReagenteAnaliseDTO> listarReagentesPorAnalise(UUID analiseId) {
-        Analise analise = analiseService.buscarAnalisePorId(analiseId);
         List<ReagenteAnalise> reagentes = repository.findAll().stream().filter(reagenteAnalise -> reagenteAnalise.getId().getAnalise().getId() == analiseId).toList();
         List<ReagenteAnaliseDTO> dtos = new ArrayList<>();
 
         for (ReagenteAnalise reagenteAnalise : reagentes) {
-            ReagenteAnaliseDTO dto = entityToDTO(reagenteAnalise);
+            ReagenteAnaliseDTO dto = new ReagenteAnaliseDTO(
+                    reagenteAnalise.getId().getReagente().getId().toString(),
+                    reagenteAnalise.getId().getAnalise().getId().toString(),
+                    reagenteAnalise.getQuantidade()
+            );
 
             dtos.add(dto);
         }
@@ -59,32 +62,4 @@ public class ReagenteAnaliseService {
         return dtos;
     }
 
-    private static ReagenteAnaliseDTO entityToDTO(ReagenteAnalise reagenteAnalise) {
-        ReagenteDTO reagenteDTO = new ReagenteDTO(
-                reagenteAnalise.getId().getReagente().getId(),
-                reagenteAnalise.getId().getReagente().getNome(),
-                reagenteAnalise.getId().getReagente().getFornecedor(),
-                reagenteAnalise.getId().getReagente().getDescricao(),
-                reagenteAnalise.getId().getReagente().getUnidade(),
-                reagenteAnalise.getId().getReagente().getQuantidade(),
-                null
-        );
-
-        AnaliseDTO analiseDTO = new AnaliseDTO(
-                reagenteAnalise.getId().getAnalise().getId(),
-                reagenteAnalise.getId().getAnalise().getEspecificacao(),
-                reagenteAnalise.getId().getAnalise().getResultado(),
-                reagenteAnalise.getId().getAnalise().getUnidade(),
-                reagenteAnalise.getId().getAnalise().getObservacao(),
-                null,
-                null
-        );
-
-        ReagenteAnaliseDTO dto = new ReagenteAnaliseDTO(
-                reagenteDTO,
-                analiseDTO,
-                reagenteAnalise.getQuantidade()
-        );
-        return dto;
-    }
 }
