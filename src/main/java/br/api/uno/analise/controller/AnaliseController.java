@@ -1,5 +1,6 @@
 package br.api.uno.analise.controller;
 
+import br.api.uno.analise.model.Analise;
 import br.api.uno.analise.model.AnaliseDTO;
 import br.api.uno.analise.service.AnaliseService;
 import jakarta.validation.Valid;
@@ -35,4 +36,12 @@ public class AnaliseController {
         List<AnaliseDTO> list = service.listarAnalisesPorLote(idLote);
         return ResponseEntity.ok(list);
     }
+
+    @GetMapping
+    public ResponseEntity<AnaliseDTO> buscarAnalisePorId(@RequestParam String analise) {
+        Analise analiseEntity = service.buscarAnalisePorId(UUID.fromString(analise));
+        AnaliseDTO analiseDTO = service.entityToDTO(analiseEntity);
+        return ResponseEntity.ok(analiseDTO);
+    }
+
 }

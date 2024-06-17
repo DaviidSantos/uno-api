@@ -95,7 +95,7 @@ public class AnaliseService {
         return repository.findById(id).orElseThrow(() -> new AnaliseNotFoundException("Analise não encontrada!"));
     }
 
-    private AnaliseDTO entityToDTO(Analise analise) {
+    public AnaliseDTO entityToDTO(Analise analise) {
         EnsaioDTO ensaioDTO = new EnsaioDTO(
                 analise.getEnsaio().getId(),
                 analise.getEnsaio().getNome()
