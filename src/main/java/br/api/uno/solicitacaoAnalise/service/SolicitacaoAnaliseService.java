@@ -47,6 +47,7 @@ public class SolicitacaoAnaliseService {
                 solicitanteDTO.endereco(),
                 solicitanteDTO.cidade(),
                 solicitanteDTO.estado(),
+                null,
                 null
         );
 
@@ -90,6 +91,7 @@ public class SolicitacaoAnaliseService {
                 solicitanteDTO.endereco(),
                 solicitanteDTO.cidade(),
                 solicitanteDTO.estado(),
+                null,
                 null
         );
 

@@ -1,5 +1,6 @@
 package br.api.uno.solicitante.model;
 
+import br.api.uno.estoque.model.Estoque;
 import br.api.uno.solicitacaoAnalise.model.SolicitacaoAnalise;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -43,6 +44,10 @@ public class Solicitante implements Serializable {
 
     @Column(nullable = false)
     private String estado;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "solicitante")
+    private Set<Estoque> estoques = new HashSet<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "solicitante")

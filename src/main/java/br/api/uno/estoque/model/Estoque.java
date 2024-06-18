@@ -1,6 +1,7 @@
 package br.api.uno.estoque.model;
 
 import br.api.uno.reagente.model.Reagente;
+import br.api.uno.solicitante.model.Solicitante;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -24,6 +25,10 @@ public class Estoque implements Serializable {
     private UUID id;
 
     private String nome;
+
+    @ManyToOne
+    @JoinColumn(name = "solicitante")
+    private Solicitante solicitante;
 
     @JsonIgnore
     @OneToMany(mappedBy = "estoque")

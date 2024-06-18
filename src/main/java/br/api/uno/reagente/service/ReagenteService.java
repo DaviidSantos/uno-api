@@ -72,7 +72,8 @@ public class ReagenteService {
     private static ReagenteDTO entityToDTO(Reagente reagente) {
         EstoqueDTO estoqueDTO = new EstoqueDTO(
                 reagente.getEstoque().getId(),
-                reagente.getEstoque().getNome()
+                reagente.getEstoque().getNome(),
+                null
         );
 
         return new ReagenteDTO(
