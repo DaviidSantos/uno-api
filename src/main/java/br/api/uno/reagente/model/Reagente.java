@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity(name = "reagente")
@@ -21,6 +22,9 @@ public class Reagente implements Serializable {
     private UUID id;
 
     private String nome;
+
+    @Column(nullable = false)
+    private LocalDate dataValidade;
 
     private String fornecedor;
 

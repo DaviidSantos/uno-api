@@ -3,6 +3,7 @@ package br.api.uno.reagente.model;
 import br.api.uno.estoque.model.EstoqueDTO;
 import jakarta.validation.constraints.NotNull;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 public record ReagenteDTO(
@@ -10,6 +11,9 @@ public record ReagenteDTO(
 
         @NotNull(message = "Campo Nome é obrigatório!")
         String nome,
+
+        @NotNull(message = "Campo Data de Validade é obrigatório!")
+        LocalDate dataValidade,
 
         @NotNull(message = "Campo Fornecedor é obrigatório!")
         String fornecedor,

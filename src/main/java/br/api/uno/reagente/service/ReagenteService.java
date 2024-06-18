@@ -30,6 +30,7 @@ public class ReagenteService {
         Reagente reagente = new Reagente(
                 null,
                 dto.nome(),
+                dto.dataValidade(),
                 dto.fornecedor(),
                 dto.descricao(),
                 dto.quantidade(),
@@ -79,6 +80,7 @@ public class ReagenteService {
         return new ReagenteDTO(
                 reagente.getId(),
                 reagente.getNome(),
+                reagente.getDataValidade(),
                 reagente.getFornecedor(),
                 reagente.getDescricao(),
                 reagente.getUnidade(),
