@@ -57,9 +57,7 @@ public class ReagenteService {
     }
 
     public Reagente buscarReagentePorId(UUID id) {
-        Reagente reagente = repository.findById(id).orElseThrow(() -> new ReagenteNotFoundException("Reagente não encontrado!"));
-
-        return reagente;
+        return repository.findById(id).orElseThrow(() -> new ReagenteNotFoundException("Reagente não encontrado!"));
     }
 
     public void retirarReagente(UUID id, double quantidade) {
@@ -70,7 +68,7 @@ public class ReagenteService {
         repository.save(reagente);
     }
 
-    private static ReagenteDTO entityToDTO(Reagente reagente) {
+    public static ReagenteDTO entityToDTO(Reagente reagente) {
         EstoqueDTO estoqueDTO = new EstoqueDTO(
                 reagente.getEstoque().getId(),
                 reagente.getEstoque().getNome(),
