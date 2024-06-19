@@ -8,4 +8,5 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ReagenteAnaliseRepository extends JpaRepository<ReagenteAnalise, UUID> {
+    List<ReagenteAnalise> findAllById_Analise(Analise analise);
 }

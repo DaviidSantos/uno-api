@@ -1,10 +1,8 @@
 package br.api.uno.reagenteAnalise.service;
 
 import br.api.uno.analise.model.Analise;
-import br.api.uno.analise.model.AnaliseDTO;
 import br.api.uno.analise.service.AnaliseService;
 import br.api.uno.reagente.model.Reagente;
-import br.api.uno.reagente.model.ReagenteDTO;
 import br.api.uno.reagente.service.ReagenteService;
 import br.api.uno.reagenteAnalise.model.ReagenteAnalise;
 import br.api.uno.reagenteAnalise.model.ReagenteAnaliseDTO;
@@ -46,7 +44,8 @@ public class ReagenteAnaliseService {
     }
 
     public List<ReagenteAnaliseDTO> listarReagentesPorAnalise(UUID analiseId) {
-        List<ReagenteAnalise> reagentes = repository.findAll().stream().filter(reagenteAnalise -> reagenteAnalise.getId().getAnalise().getId() == analiseId).toList();
+        Analise analise = analiseService.buscarAnalisePorId(analiseId);
+        List<ReagenteAnalise> reagentes = repository.findAllById_Analise(analise);
         List<ReagenteAnaliseDTO> dtos = new ArrayList<>();
 
         for (ReagenteAnalise reagenteAnalise : reagentes) {
